@@ -10,6 +10,7 @@ use App\models\tt;
 use App\models\sylb;
 use App\models\note;
 use App\models\result;
+use Mail;
 class studentController extends Controller
 {
     public function __construct()
@@ -52,10 +53,7 @@ class studentController extends Controller
     }
     public function notes()
     {
-        $id=session('sess');
-        $data['res']= note::join('sregs', 'sregs.class', '=', 'notes.class')
-        ->where('sregs.id',$id)
-        ->get(['notes.subject','notes.note']);
+        
         return view('student.viewnotes',$data);
     }
     public function result()
@@ -70,6 +68,10 @@ class studentController extends Controller
     {
         $data['res']=$this->obj1->getteach('tregs');
         return view('student.sfeedback',$data);
+        $id=session('sess');
+        $data['res']= note::join('sregs', 'sregs.class', '=', 'notes.class')
+        ->where('sregs.id',$id)
+        ->get(['notes.subject','notes.note']);
     }
     public function regaction(request $req)
     {
@@ -102,6 +104,13 @@ class studentController extends Controller
         'usertype'=>'student'
     ];
         $this->obj->reg('sregs',$data);
+    $mail=['name'=>$name,
+                'msg'=>'Welcome to E-learning'];
+                $user['to']=$email;
+                Mail::send('email',$mail,function($message) use($user){
+                    $message->to($user['to']);
+                    $message->subject('Email Sending');
+                });
     return redirect('/login');
 }
 public function logaction(request $req)

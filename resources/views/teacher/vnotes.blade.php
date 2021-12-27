@@ -72,7 +72,7 @@
                         <th>Id</th>
                         <th>Class</th>
                         <th>Subject</th>
-                        <th>Notes</th>\
+                        <th>Notes</th>
                 </tr>
                 <tr>
 
